@@ -7,7 +7,7 @@ public class Petition {
     private String title;
     private String description;
     private int signatories;
-    private List<Signatory> signatoryList; // New list for signatories
+    private List<Signatory> signatoryList;
 
     public Petition(String title, String description) {
         this.title = title;
