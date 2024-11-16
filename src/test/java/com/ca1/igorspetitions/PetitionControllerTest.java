@@ -16,7 +16,7 @@ class PetitionControllerTest {
     @Test
     void testGetAllPetitions() throws Exception {
         mockMvc.perform(get("/petitions"))
-                .andExpect(status().isOk())
+                .andExpect(status().isOk()) //
                 .andExpect(content().string("[]"));  // Expecting an empty list here
     }
 
