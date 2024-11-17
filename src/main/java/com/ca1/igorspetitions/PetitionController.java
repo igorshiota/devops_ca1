@@ -23,6 +23,11 @@ public class PetitionController {
         petitions.add(new Petition("Support Animal Rights", "A petition to support animal rights globally."));
     }
 
+    // Getter for the petitions list (for testing)
+    public List<Petition> getPetitions() {
+        return petitions;
+    }
+
     // Page to view all petitions
     @GetMapping("/all")
     public String viewAllPetitions(Model model) {
@@ -70,9 +75,6 @@ public class PetitionController {
         return "searchResults";  // Return the view to display search results
     }
 
-    
-    
-
     // Page to view a specific petition
     @GetMapping("/view")
     public String viewPetition(@RequestParam int index, Model model) {
@@ -81,7 +83,6 @@ public class PetitionController {
         model.addAttribute("index", index);  // Pass the index separately
         return "viewPetition";
     }
-
 
     // Page to sign a petition
     @PostMapping("/sign")

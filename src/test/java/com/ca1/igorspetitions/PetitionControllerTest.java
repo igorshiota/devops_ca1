@@ -1,5 +1,6 @@
 package com.ca1.igorspetitions;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,19 +14,28 @@ class PetitionControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private PetitionController petitionController;  // Autowire the PetitionController
+
+    @BeforeEach
+    void setup() {
+        // Reset the petitions list to have only the initial 2 petitions
+        petitionController.getPetitions().clear();  // Clear any existing petitions
+        petitionController.getPetitions().add(new Petition("Save the Forest", "A petition to save the rainforest."));
+        petitionController.getPetitions().add(new Petition("Support Animal Rights", "A petition to support animal rights globally."));
+    }
+
     @Test
     void testGetAllPetitions() throws Exception {
-        // Perform a GET request to /petitions/all
         mockMvc.perform(get("/petitions/all")) 
                 .andExpect(status().isOk())  // Expecting a 200 OK response
                 .andExpect(view().name("viewAll"))  // The controller returns the "viewAll" view name
                 .andExpect(model().attributeExists("petitions"))  // Check if the "petitions" attribute is added to the model
-                .andExpect(model().attribute("petitions", org.hamcrest.Matchers.hasSize(2)));  // Check if the model contains 2 petitions initially
+                .andExpect(model().attribute("petitions", org.hamcrest.Matchers.hasSize(2)));  // Expect 2 petitions
     }
 
     @Test
     void testCreatePetition() throws Exception {
-        // Perform a POST request to create a new petition
         mockMvc.perform(post("/petitions/create")  
                 .param("title", "Save the Rainforest") 
                 .param("description", "A petition to protect forests."))  
@@ -35,7 +45,6 @@ class PetitionControllerTest {
 
     @Test
     void testSignPetition() throws Exception {
-        // Perform a POST request to sign a petition
         mockMvc.perform(post("/petitions/sign")
                 .param("index", "0")
                 .param("name", "Jane Doe")
