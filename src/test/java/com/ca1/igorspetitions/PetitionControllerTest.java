@@ -15,18 +15,27 @@ class PetitionControllerTest {
 
     @Test
     void testGetAllPetitions() throws Exception {
-        mockMvc.perform(get("/petitions"))
-                .andExpect(status().isOk()) //
-                .andExpect(content().string("[]"));  // Expecting an empty list here
+        mockMvc.perform(get("/petitions/all")) 
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));  // Expecting an empty list initially
     }
 
     @Test
     void testCreatePetition() throws Exception {
-        String newPetition = "{\"title\": \"Save the Rainforest\", \"description\": \"A petition to protect forests.\"}";
+        mockMvc.perform(post("/petitions/create")  
+                .param("title", "Save the Rainforest") 
+                .param("description", "A petition to protect forests."))  
+                .andExpect(status().is3xxRedirection())  
+                .andExpect(redirectedUrl("/petitions/all"));  // Ensure it redirects to /petitions/all
+    }
 
-        mockMvc.perform(post("/petitions")
-                .contentType("application/json")
-                .content(newPetition))
-                .andExpect(status().isCreated());
+    @Test
+    void testSignPetition() throws Exception {
+        mockMvc.perform(post("/petitions/sign")
+                .param("index", "0")
+                .param("name", "Jane Doe")
+                .param("email", "jane@example.com"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/petitions/view?index=0"));
     }
 }

@@ -6,6 +6,9 @@ public class Signatory {
     private String email;
 
     public Signatory(String name, String email) {
+        if (!email.matches("[^@]+@[^@]+\\.[^@]+")) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
         this.name = name;
         this.email = email;
     }
